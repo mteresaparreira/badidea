@@ -12,12 +12,12 @@ And cite is as:
 
 ## Supplementary Material
 
-Available [here]()
+Available [here](https://github.com/mteresaparreira/badidea/blob/main/ROMAN2024_BADIdea_supp.pdf)
 
 
 ## Stimulus Videos
 
-Information available [here]()
+Information available [here](https://github.com/mteresaparreira/badidea/blob/main/stimulus_dataset_information_repository.xlsx)
 
 ## Code
 
