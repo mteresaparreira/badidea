@@ -7,5 +7,21 @@ You can read the paper here: (awaiting reviews)
 
 And cite is as:
 
+(to do)
+
+
+## Supplementary Material
+
+Available [here]()
+
+
+## Stimulus Videos
+
+Information available [here]()
+
+## Code
+
+To upload.
+
 
 
