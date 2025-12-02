@@ -1,0 +1,37 @@
+# GitHub Pages Configuration for Bad Idea Project
+
+# Site settings
+title: "Bad Idea, Right? - HRI Research"
+description: "Exploring Anticipatory Human Reactions for Outcome Prediction in Human-Robot Interaction"
+author: "Maria Teresa Parreira et al."
+email: mb2554@cornell.edu
+
+# Build settings
+# Since we're using a custom HTML page, we don't need Jekyll processing
+# This tells GitHub Pages to serve the HTML as-is
+theme: null
+markdown: kramdown
+
+# Exclude files from processing
+exclude:
+  - README.md
+  - LICENSE
+
+# Include these file types
+include:
+  - .htaccess
+  - _pages
+
+# Plugins (optional)
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# SEO settings (optional but helpful)
+url: "https://irl-ct.github.io"
+baseurl: "/badidea"
+lang: en_US
+
+# Social links (optional)
+github_username: irl-ct
+repository: irl-ct/badidea

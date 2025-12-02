@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Exploring Anticipatory Human Reactions for Outcome Prediction in Human-Robot Interaction">
+    <meta name="keywords" content="HRI, Human-Robot Interaction, Machine Learning, Anticipatory Reactions, Robot Error Prevention">
+    <meta name="author" content="Maria Teresa Parreira, Cornell Tech">
+    <title>"Bad Idea, Right?" - Anticipatory Human Reactions in HRI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #FFB6D9 0%, #FF6B9D 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: #FF6B9D;
+            border-bottom: 3px solid #FF6B9D;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #FF85A2;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+
+        .authors {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .affiliation {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .conference {
+            font-size: 1rem;
+            margin-top: 15px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .contact-info {
+            font-size: 0.9rem;
+            margin-top: 10px;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        main {
+            background: white;
+            padding: 60px 0;
+        }
+
+        section {
+            margin-bottom: 60px;
+        }
+
+        .abstract {
+            background: #FFF5F9;
+            padding: 30px;
+            border-left: 4px solid #FF6B9D;
+            margin: 30px 0;
+            border-radius: 5px;
+        }
+
+        .abstract p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .image-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .image-grid img {
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .image-grid img:hover {
+            transform: scale(1.05);
+        }
+
+        .image-grid-2 img {
+            width: 45%;
+            max-width: 400px;
+        }
+
+        .image-grid-3 img {
+            width: 30%;
+            max-width: 300px;
+        }
+
+        .image-single img {
+            width: 60%;
+            max-width: 600px;
+        }
+
+        .key-findings {
+            background: #FFF0F5;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .key-findings ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .key-findings li {
+            padding-left: 30px;
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .key-findings li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #FF6B9D;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .key-findings strong {
+            color: #FF85A2;
+        }
+
+        .applications {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .application-card {
+            background: linear-gradient(135deg, #FFB6D9 0%, #FF6B9D 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .resources {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .resource-card {
+            background: #FFF5F9;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #FFB6D9;
+            transition: all 0.3s ease;
+        }
+
+        .resource-card:hover {
+            background: #FFB6D9;
+            transform: translateY(-5px);
+        }
+
+        .resource-card:hover a {
+            color: white;
+        }
+
+        .resource-card h4 {
+            margin-bottom: 10px;
+            color: #FF6B9D;
+        }
+
+        .resource-card:hover h4 {
+            color: white;
+        }
+
+        .resource-card a {
+            color: #FF85A2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .citation-box {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: white;
+            color: #FF6B9D;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+            border: 2px solid white;
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: white;
+            border-color: white;
+        }
+
+        footer {
+            background: #2d3748;
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        footer a {
+            color: #FFB6D9;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .protocol-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .protocol-section {
+            background: #FFF5F9;
+            padding: 25px;
+            border-radius: 8px;
+            border-top: 4px solid #FF85A2;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .image-grid-2 img,
+            .image-grid-3 img,
+            .image-single img {
+                width: 100%;
+            }
+
+            .applications {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>"Bad Idea, Right?"</h1>
+            <p class="subtitle">Exploring Anticipatory Human Reactions for Outcome Prediction in HRI</p>
+            <div class="authors">
+                <a href="https://www.mariateresaparreira.com/" target="_blank">Maria Teresa Parreira</a><sup>1</sup>,
+                <a href="https://www.linkedin.com/in/glsukruth/" target="_blank">Sukruth Gowdru Lingaraju</a><sup>1</sup>,
+                <a href="https://scholar.google.com/citations?user=iF7yqHkAAAAJ&hl=en" target="_blank">Adolfo Ramirez-Aristizabal</a><sup>2</sup>,
+                <a href="https://bremers.github.io/" target="_blank">Alexandra Bremers</a><sup>1</sup>,
+                <a href="https://manaswisaha.github.io/" target="_blank">Manaswi Saha</a><sup>2</sup>,
+                <a href="https://scholar.google.com/citations?user=KtPU2SMAAAAJ&hl=en" target="_blank">Michael Kuniavsky</a><sup>2</sup>,
+                <a href="https://wendyju.com/" target="_blank">Wendy Ju</a><sup>1</sup>
+            </div>
+            <p class="affiliation">¹Cornell Tech, ²Accenture Labs</p>
+            <p class="conference">Published at the 2024 33rd IEEE International Conference on Robot and Human Interactive Communication (ROMAN)</p>
+            <p class="contact-info">For inquiries, please contact Teresa (mb2554 [at] cornell [dot] edu).</p>
+            <div style="margin-top: 30px;">
+                <a href="https://ieeexplore.ieee.org/document/10731310" class="btn" target="_blank">Read Paper</a>
+                <a href="submission/ROMAN2024_BADIdea_supp.pdf" class="btn" target="_blank">Supplementary Material</a>
+                <a href="https://github.com/irl-ct/badidea" class="btn" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section id="abstract">
+                <h2>Abstract</h2>
+                <div class="abstract">
+                    <p>
+                        Humans have the ability to anticipate what will happen in their environment based on perceived information.
+                        Their anticipation is often manifested as an externally observable behavioral reaction, which cues other people
+                        in the environment that something bad might happen. As robots become more prevalent in human spaces, robots
+                        can leverage these visible anticipatory responses to assess whether their own actions might be "a bad idea?"
+                    </p>
+                    <p>
+                        In this study, we delved into the potential of human anticipatory reaction recognition to predict outcomes.
+                        We conducted a user study wherein 30 participants watched videos of action scenarios and were asked about
+                        their anticipated outcome of the situation shown in each video ("good" or "bad"). We collected video and audio
+                        data of the participants reactions as they were watching these videos. We then carefully analyzed the participants'
+                        behavioral anticipatory responses; this data was used to train machine learning models to predict anticipated
+                        outcomes based on human observable behavior.
+                    </p>
+                    <p>
+                        Reactions are multimodal, compound and diverse, and we find significant differences in facial reactions.
+                        Model performances are around 0.5-0.6 test accuracy, and increase notably when nonreactive participants are
+                        excluded from the dataset. We discuss the implications of these findings and future work. This research offers
+                        insights into improving the safety and efficiency of human-robot interactions, contributing to the evolving
+                        field of robotics and human-robot collaboration.
+                    </p>
+                </div>
+            </section>
+
+            <section id="protocol">
+                <h2>Study Protocol</h2>
+
+                <div class="protocol-grid">
+                    <div class="protocol-section">
+                        <h3>Overview</h3>
+                        <p>We conducted an online crowd-sourced study to collect webcam reactions to stimulus videos from a global sample recruited through Prolific.</p>
+                        <ul>
+                            <li><strong>Participants:</strong> 30 participants (ages 20-39, diverse backgrounds)</li>
+                            <li><strong>Stimulus Dataset:</strong> 30 short videos (9.62 ± 2.77 seconds) featuring humans and robots</li>
+                            <li><strong>Study Duration:</strong> approximately 30 minutes</li>
+                        </ul>
+                    </div>
+
+                    <div class="protocol-section">
+                        <h3>Data Collection</h3>
+                        <ul>
+                            <li>Webcam recordings at 30 fps captured participants' facial reactions</li>
+                            <li>Video order was randomized for each participant</li>
+                            <li>Participants could not see themselves during video playback</li>
+                            <li>Two-stage video viewing: shortened version followed by prediction, then full outcome reveal</li>
+                        </ul>
+                    </div>
+
+                    <div class="protocol-section">
+                        <h3>Analysis</h3>
+                        <ul>
+                            <li>Facial feature extraction using OpenFace 2.0</li>
+                            <li>35 facial action units (AUs) analyzed</li>
+                            <li>Machine learning models tested: RNNs, LSTMs, GRUs, BiLSTMs, and Deep Neural Networks</li>
+                            <li>12 action units with significantly different activation intensities identified</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="reactions">
+                <h2>Example Reactions</h2>
+                <p>Here are some examples of anticipatory reactions captured during the study:</p>
+
+                <h3>Responses to good (left) vs bad (right) outcome</h3>
+                <div class="image-grid image-grid-2">
+                    <img src="submission/images/0_reactive.gif" alt="Reactive Response - Good Outcome">
+                    <img src="submission/images/1_reactive.gif" alt="Reactive Response - Bad Outcome">
+                </div>
+
+                <h3>Diverse Anticipatory Behaviors</h3>
+                <div class="image-grid image-grid-3">
+                    <img src="submission/images/1.gif" alt="Reaction 1">
+                    <img src="submission/images/2.gif" alt="Reaction 2">
+                    <img src="submission/images/3.gif" alt="Reaction 3">
+                </div>
+                <div class="image-grid image-grid-3">
+                    <img src="submission/images/4.gif" alt="Reaction 4">
+                    <img src="submission/images/5.gif" alt="Reaction 5">
+                    <img src="submission/images/6.gif" alt="Reaction 6">
+                </div>
+
+                <h3>Example Stimulus</h3>
+                <div class="image-grid image-single">
+                    <img src="submission/images/stimulus.gif" alt="Example Stimulus Video">
+                </div>
+
+                <h3>Comparison: Reactive vs Non-Reactive</h3>
+                <p>Our study found that some participants displayed very visible reactions (especially for anticipated bad outcomes), while others showed subtle to no reactions at all.</p>
+                <div class="image-grid image-grid-2">
+                    <img src="submission/images/non_reactive.gif" alt="Non-Reactive Example">
+                </div>
+            </section>
+
+            <section id="findings">
+                <h2>Key Findings</h2>
+                <div class="key-findings">
+                    <ul>
+                        <li><strong>Reactions to bad outcomes are more salient:</strong> Participants displayed more diverse and visible reactions when anticipating bad outcomes</li>
+                        <li><strong>Multimodal and evolving responses:</strong> Anticipatory behaviors include facial expressions, head motion, body pose changes, and vocalizations that compound and evolve over time</li>
+                        <li><strong>Person-dependent variability:</strong> Different participants showed varying degrees of reactivity</li>
+                        <li><strong>Significant facial features:</strong> 12 facial action units showed significantly different activation patterns between good and bad anticipated outcomes, including:
+                            <ul style="margin-top: 10px;">
+                                <li>Inner Brow Raiser</li>
+                                <li>Brow Lowerer</li>
+                                <li>Cheek Raiser</li>
+                                <li>Nose Wrinkler</li>
+                                <li>Lip Corner Puller</li>
+                                <li>Jaw Drop</li>
+                                <li>Blink</li>
+                            </ul>
+                        </li>
+                        <li><strong>Model performance:</strong> Best models achieved ~60% accuracy on the curated dataset, with notable improvements when non-reactive participants were excluded</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="applications">
+                <h2>Applications</h2>
+                <p>This research has implications for:</p>
+                <div class="applications">
+                    <div class="application-card">
+                        <h3 style="color: white;">Robot Error Prevention</h3>
+                        <p>Systems that can detect and prevent errors before they happen</p>
+                    </div>
+                    <div class="application-card">
+                        <h3 style="color: white;">Human-Robot Collaboration Safety</h3>
+                        <p>Enhanced safety through anticipatory social cue detection</p>
+                    </div>
+                    <div class="application-card">
+                        <h3 style="color: white;">Adaptive Robot Behavior</h3>
+                        <p>Robots that respond to human social signals in real-time</p>
+                    </div>
+                    <div class="application-card">
+                        <h3 style="color: white;">Human-AI Collaboration</h3>
+                        <p>Proactive failure detection in collaborative systems</p>
+                    </div>
+                </div>
+            </section>
+            <section id="citation">
+                <h2>Citation</h2>
+                <div class="citation-box">
+@INPROCEEDINGS{10731310,
+  author={Parreira, Maria Teresa and Lingaraju, Sukruth Gowdru and
+          Ramirez-Artistizabal, Adolfo and Bremers, Alexandra and
+          Saha, Manaswi and Kuniavsky, Michael and Ju, Wendy},
+  booktitle={2024 33rd IEEE International Conference on Robot and
+             Human Interactive Communication (ROMAN)},
+  title={"Bad Idea, Right?" Exploring Anticipatory Human Reactions
+         for Outcome Prediction in HRI},
+  year={2024},
+  pages={2072-2078},
+  doi={10.1109/RO-MAN60168.2024.10731310}
+}
+                </div>
+            </section>
+
+            <section id="resources">
+                <h2>Resources</h2>
+                <div class="resources">
+                    <div class="resource-card">
+                        <h4>📄 Paper</h4>
+                        <a href="https://ieeexplore.ieee.org/document/10731310" target="_blank">IEEE Xplore</a>
+                    </div>
+                    <div class="resource-card">
+                        <h4>📋 Supplementary Material</h4>
+                        <a href="submission/ROMAN2024_BADIdea_supp.pdf" target="_blank">PDF</a>
+                    </div>
+                    <div class="resource-card">
+                        <h4>📊 Presentation Slides</h4>
+                        <a href="https://docs.google.com/presentation/d/1uPxuz1ECplZpMuz2cuPoZt9bN1a6iz1TqgByaPx65gk/edit?usp=sharing" target="_blank">Google Slides</a>
+                    </div>
+                    <div class="resource-card">
+                        <h4>🎥 Stimulus Dataset</h4>
+                        <a href="stimulus_dataset_information_repository.xlsx" target="_blank">Dataset Info</a>
+                    </div>
+                    <div class="resource-card">
+                        <h4>💻 Code</h4>
+                        <a href="code/" target="_blank">Implementation</a>
+                    </div>
+                    <div class="resource-card">
+                        <h4>🔗 GitHub</h4>
+                        <a href="https://github.com/mteresaparreira/badidea" target="_blank">Repository</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>For questions or collaborations, please reach out to the authors through their respective institutions.</p>
+            <p style="margin-top: 10px;">
+                <strong>Cornell Tech Interaction Research Lab:</strong>
+                <a href="https://irl.tech.cornell.edu/" target="_blank">https://irl.tech.cornell.edu/</a>
+            </p>
+            <p style="margin-top: 20px; opacity: 0.7; font-size: 0.9rem;">
+                © 2024 Cornell Tech. Published at IEEE RO-MAN 2024.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
